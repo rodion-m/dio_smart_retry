@@ -1,3 +1,3 @@
 library dio_smart_retry;
 
-export 'retry_interceptor.dart';
+export 'src/retry_interceptor.dart';

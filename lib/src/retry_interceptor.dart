@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 
-import 'src/http_status_codes.dart';
+import 'http_status_codes.dart';
 
 typedef RetryEvaluator = FutureOr<bool> Function(DioError error, int attempt);
 
