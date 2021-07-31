@@ -1,7 +1,7 @@
 [![Pub Version](https://img.shields.io/pub/v/dio_smart_retry?logo=dart&logoColor=white)](https://pub.dev/packages/dio_smart_retry/)
 [![Dart SDK Version](https://badgen.net/pub/sdk-version/dio_smart_retry)](https://pub.dev/packages/dio_smart_retry/)
 [![style: very good analysis](https://img.shields.io/badge/style-very_good_analysis-B22C89.svg)](https://pub.dev/packages/very_good_analysis)
-[![License](https://img.shields.io/github/license/dart-code-checker/dart-code-metrics)](https://github.com/dart-code-checker/dart-code-metrics/blob/master/LICENSE)
+[![License](https://img.shields.io/github/license/rodion-m/dio_smart_retry)](https://github.com/rodion-m/dio_smart_retry/blob/master/LICENSE)
 
 ## Dio Smart Retry
 Flexible retry library for Dio package. This is a next generation of an abandoned `dio_retry` package. \
