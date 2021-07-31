@@ -1,5 +1,3 @@
-// status codes listed at http://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
-
 const status100Continue = 100;
 const status101SwitchingProtocols = 101;
 const status102Processing = 102;
@@ -100,14 +98,11 @@ const retryableStatuses = <int>{
   status502BadGateway,
   status503ServiceUnavailable,
   status504GatewayTimeout,
-
   status440LoginTimeout,
   status499ClientClosedRequest,
   status460ClientClosedRequest,
-
   status598NetworkReadTimeoutError,
   status599NetworkConnectTimeoutError,
-
   status520WebServerReturnedUnknownError,
   status521WebServerIsDown,
   status522ConnectionTimedOut,
