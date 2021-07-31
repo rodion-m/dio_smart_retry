@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/github/license/dart-code-checker/dart-code-metrics)](https://github.com/dart-code-checker/dart-code-metrics/blob/master/LICENSE)
 
 ## Dio Smart Retry
-Fluent retry library for Dio package. This is a next generation of an abandoned `dio_retry` package. \
+Flexible retry library for Dio package. This is a next generation of an abandoned `dio_retry` package. \
 By default, the request will be retried only for appropriate retryable http statuses. \
 Also, it supports dynamic delay between retries. \
 **Null Safety.**
