@@ -1,6 +1,5 @@
-import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:dio/dio.dart';
-import 'package:dio_smart_retry/src/http_status_codes.dart';
+import 'package:dio_smart_retry/dio_smart_retry.dart';
 
 void main() async {
   final dio = Dio();
@@ -17,6 +16,6 @@ void main() async {
     ],
   ));
 
-  /// Sending a failing request for 3 times with a 1s, then 2s, then 3s interval
-  await dio.get('https://mock.codes/$status500InternalServerError');
+  /// Sending a failing request for 3 times with 1s, then 2s, then 3s interval
+  await dio.get('https://mock.codes/500');
 }

@@ -31,7 +31,7 @@ dio.interceptors.add(RetryInterceptor(
   ],
 ));
 
-/// Sending a failing request for 3 times with a 1s, then 2s, then 3s interval
+/// Sending a failing request for 3 times with 1s, then 2s, then 3s interval
 await dio.get('https://mock.codes/500');
 ```
 [See `example/dio_smart_retry_example.dart`](https://github.com/rodion-m/dio_smart_retry/blob/master/example/dio_smart_retry_example.dart).
