@@ -81,7 +81,13 @@ class RetryInterceptor extends Interceptor {
     if (delay != Duration.zero) await Future<void>.delayed(delay);
 
     // ignore: unawaited_futures
-    dio.fetch<void>(err.requestOptions).then((value) => handler.resolve(value));
+    try {
+      await dio.fetch<void>(err.requestOptions).then((value) => handler.resolve(value));
+    } on DioError catch (e) {
+      super.onError(e, handler);
+    } catch (e) {
+      print('Retry error!!! $e');
+    }
   }
 
   Duration _getDelay(int attempt) {
