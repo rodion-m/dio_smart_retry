@@ -1,3 +1,8 @@
+## 1.1.0
+
+- A request catching is fixed (#1)
+- Dependencies were updated
+
 ## 1.0.3
 
 - Example updated

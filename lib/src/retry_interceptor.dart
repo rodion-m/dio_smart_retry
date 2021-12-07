@@ -80,13 +80,11 @@ class RetryInterceptor extends Interceptor {
 
     if (delay != Duration.zero) await Future<void>.delayed(delay);
 
-    // ignore: unawaited_futures
     try {
-      await dio.fetch<void>(err.requestOptions).then((value) => handler.resolve(value));
+      await dio.fetch<void>(err.requestOptions)
+          .then((value) => handler.resolve(value));
     } on DioError catch (e) {
       super.onError(e, handler);
-    } catch (e) {
-      print('Retry error!!! $e');
     }
   }
 
@@ -102,7 +100,7 @@ extension RequestOptionsX on RequestOptions {
   static const _kAttemptKey = 'ro_attempt';
   static const _kDisableRetryKey = 'ro_disable_retry';
 
-  int get _attempt => extra[_kAttemptKey] ?? 0;
+  int get _attempt => (extra[_kAttemptKey] as int?) ?? 0;
 
   set _attempt(int value) => extra[_kAttemptKey] = value;
 
