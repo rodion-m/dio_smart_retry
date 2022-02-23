@@ -18,6 +18,7 @@ class RetryInterceptor extends Interceptor {
       Duration(seconds: 5),
     ],
     RetryEvaluator? retryEvaluator,
+    this.ignoreRetryEvaluatorExceptions = false,
   }) : _retryEvaluator = retryEvaluator ?? defaultRetryEvaluator;
 
   /// The original dio
@@ -29,56 +30,82 @@ class RetryInterceptor extends Interceptor {
   /// The number of retry in case of an error
   final int retries;
 
+  /// Ignore exception if [_retryEvaluator] throws it (not recommend)
+  final bool ignoreRetryEvaluatorExceptions;
+
   /// The delays between attempts.
   /// Empty [retryDelays] means no delay.
   ///
   /// If [retries] count more than [retryDelays] count,
-  /// the last value of [retryDelays] will be used.
+  /// the last element value of [retryDelays] will be used.
   final List<Duration> retryDelays;
 
   /// Evaluating if a retry is necessary.regarding the error.
   ///
   /// It can be a good candidate for additional operations too, like
-  /// updating authentication token in case of a unauthorized error (be careful
-  /// with concurrency though).
+  /// updating authentication token in case of a unauthorized error
+  /// (be careful with concurrency though).
   ///
   /// Defaults to [defaultRetryEvaluator].
   final RetryEvaluator _retryEvaluator;
 
   /// Returns true only if the response hasn't been cancelled or got
-  /// a bas status code.
+  /// a bad status code.
   // ignore: avoid-unused-parameters
   static FutureOr<bool> defaultRetryEvaluator(DioError error, int attempt) {
     bool shouldRetry;
     if (error.type == DioErrorType.response) {
       final statusCode = error.response?.statusCode;
-      shouldRetry = statusCode != null ? isRetryable(statusCode) : true;
+      if (statusCode != null) {
+        shouldRetry = isRetryable(statusCode);
+      } else {
+        shouldRetry = true;
+      }
     } else {
-      shouldRetry = error.type != DioErrorType.cancel;
+      shouldRetry = error.type != DioErrorType.cancel
+                  && error.error is! FormatException;
     }
     return shouldRetry;
   }
 
+  Future<bool> _shouldRetry(DioError error, int attempt) async {
+    try {
+      return await _retryEvaluator(error, attempt);
+    } catch(e) {
+      logPrint?.call('There was an exception in _retryEvaluator: $e');
+      if(!ignoreRetryEvaluatorExceptions) {
+        rethrow;
+      }
+    }
+    return true;
+  }
+
   @override
   Future onError(DioError err, ErrorInterceptorHandler handler) async {
-    if (err.requestOptions.disableRetry) return super.onError(err, handler);
-    var attempt = err.requestOptions._attempt + 1;
-    final shouldRetry =
-        attempt <= retries && await _retryEvaluator(err, attempt);
+    if (err.requestOptions.disableRetry) {
+      return super.onError(err, handler);
+    }
 
-    if (!shouldRetry) return super.onError(err, handler);
+    final attempt = err.requestOptions._attempt + 1;
+    final shouldRetry = attempt <= retries && await _shouldRetry(err, attempt);
+
+    if (!shouldRetry) {
+      return super.onError(err, handler);
+    }
 
     err.requestOptions._attempt = attempt;
     final delay = _getDelay(attempt);
     logPrint?.call(
-      '[${err.requestOptions.uri}] An error occurred during request, '
+      '[${err.requestOptions.path}] An error occurred during request, '
       'trying again '
       '(attempt: $attempt/$retries, '
       'wait ${delay.inMilliseconds} ms, '
       'error: ${err.error})',
     );
 
-    if (delay != Duration.zero) await Future<void>.delayed(delay);
+    if (delay != Duration.zero) {
+      await Future<void>.delayed(delay);
+    }
 
     try {
       await dio.fetch<void>(err.requestOptions)

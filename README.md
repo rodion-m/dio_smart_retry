@@ -11,7 +11,7 @@ Also, it supports dynamic delay between retries. \
 
 ## Getting started
 
-1. Add package to pubspec.yaml: `dio_smart_retry: ^1.1.0`
+1. Add package to pubspec.yaml: `dio_smart_retry: ^1.2.0`
 2. Import package: `import 'package:dio_smart_retry/dio_smart_retry.dart'`
 
 ## Usage
@@ -37,7 +37,7 @@ await dio.get('https://mock.codes/500');
 [See `example/dio_smart_retry_example.dart`](https://github.com/rodion-m/dio_smart_retry/blob/master/example/dio_smart_retry_example.dart).
 
 ## Default retryable status codes list
-Responses with this http status codes will be retried by default:
+Responses with these http status codes will be retried by default:
 * 408: RequestTimeout
 * 429: TooManyRequests
 * 500: InternalServerError
