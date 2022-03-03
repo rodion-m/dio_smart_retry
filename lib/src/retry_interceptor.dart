@@ -11,6 +11,7 @@ class RetryInterceptor extends Interceptor {
   RetryInterceptor({
     required this.dio,
     this.logPrint,
+    this.onRetry,
     this.retries = 3,
     this.retryDelays = const [
       Duration(seconds: 1),
@@ -26,6 +27,9 @@ class RetryInterceptor extends Interceptor {
 
   /// For logging purpose
   final Function(String message)? logPrint;
+
+  /// To listen when request fails and its trying again
+  final Function(int statusCode)? onRetry;
 
   /// The number of retry in case of an error
   final int retries;
@@ -102,7 +106,7 @@ class RetryInterceptor extends Interceptor {
       'wait ${delay.inMilliseconds} ms, '
       'error: ${err.error})',
     );
-
+    onRetry?.call(err.response?.statusCode??-1);
     if (delay != Duration.zero) {
       await Future<void>.delayed(delay);
     }
