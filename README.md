@@ -60,5 +60,7 @@ Responses with these http status codes will be retried by default:
 ## Disable retry
 It's possible to manually disable retry for a specified request. Use `disableRetry` extension for that:
 ```dart
-final request = RequestOptions(path: '/')..disableRetry = true;
+final request = RequestOptions(path: '/')
+  ..disableRetry = true;
+await dio.fetch<String>(request);
 ```
