@@ -123,9 +123,10 @@ class RetryInterceptor extends Interceptor {
   }
 }
 
+const _kDisableRetryKey = 'ro_disable_retry';
+
 extension RequestOptionsX on RequestOptions {
   static const _kAttemptKey = 'ro_attempt';
-  static const _kDisableRetryKey = 'ro_disable_retry';
 
   int get _attempt => (extra[_kAttemptKey] as int?) ?? 0;
 
@@ -134,4 +135,10 @@ extension RequestOptionsX on RequestOptions {
   bool get disableRetry => (extra[_kDisableRetryKey] as bool?) ?? false;
 
   set disableRetry(bool value) => extra[_kDisableRetryKey] = value;
+}
+
+extension OptionsX on Options {
+  bool get disableRetry => (extra?[_kDisableRetryKey] as bool?) ?? false;
+
+  set disableRetry(bool value) => extra?[_kDisableRetryKey] = value;
 }
