@@ -11,7 +11,7 @@ Also, it supports dynamic delay between retries. \
 
 ## Getting started
 
-1. Add package to pubspec.yaml: `dio_smart_retry: ^1.2.0`
+1. Add package to pubspec.yaml: `dio_smart_retry: ^1.3.0`
 2. Import package: `import 'package:dio_smart_retry/dio_smart_retry.dart'`
 
 ## Usage
@@ -69,4 +69,20 @@ or
 final options = Options()
   ..disableRetry = true;
 await dio.get<String>('/', options: options);
+```
+
+## Add extra retryable status codes
+It's possible to add you own retryable status codes. Use `retryableExtraStatuses` option for that. Here is an example:
+```dart
+RetryInterceptor(
+  dio: dio,
+  retryableExtraStatuses: { status401Unauthorized },
+)
+```
+or:
+```dart
+RetryInterceptor(
+  dio: dio,
+  retryableExtraStatuses: { 401 },
+)
 ```

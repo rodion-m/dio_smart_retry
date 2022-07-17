@@ -1,3 +1,5 @@
+import 'package:dio_smart_retry/dio_smart_retry.dart';
+
 const status100Continue = 100;
 const status101SwitchingProtocols = 101;
 const status102Processing = 102;
@@ -91,7 +93,7 @@ const status499ClientClosedRequest = 499;
 /// From AWS Elastic Load Balancer
 const status460ClientClosedRequest = 460;
 
-const retryableStatuses = <int>{
+const defaultRetryableStatuses = <int>{
   status408RequestTimeout,
   status429TooManyRequests,
   status500InternalServerError,
@@ -112,4 +114,12 @@ const retryableStatuses = <int>{
   status527RailgunError,
 };
 
-bool isRetryable(int statusCode) => retryableStatuses.contains(statusCode);
+// For backward compatibility purpose
+@Deprecated('Use [defaultRetryableStatuses]')
+const retryableStatuses = defaultRetryableStatuses;
+
+// For backward compatibility purpose
+/// Be careful: this method do not
+///   take into account [RetryInterceptor.retryableExtraStatuses]
+bool isRetryable(int statusCode)
+  => defaultRetryableStatuses.contains(statusCode);
