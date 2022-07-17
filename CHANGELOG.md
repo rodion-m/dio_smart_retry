@@ -1,5 +1,6 @@
-## 1.3.1
+## 1.3.2
 - Add a feature allowing to specify extra retryable status codes (parameter `retryableExtraStatuses`) (#11)
+- Add a request's `CancelToken` checking
 - Update dependencies
 
 ## 1.2.0

@@ -93,6 +93,8 @@ class RetryInterceptor extends Interceptor {
     if (err.requestOptions.disableRetry) {
       return super.onError(err, handler);
     }
+    bool isRequestedCancelled() =>
+        err.requestOptions.cancelToken?.isCancelled == true;
 
     final attempt = err.requestOptions._attempt + 1;
     final shouldRetry = attempt <= retries && await _shouldRetry(err, attempt);
@@ -113,6 +115,10 @@ class RetryInterceptor extends Interceptor {
 
     if (delay != Duration.zero) {
       await Future<void>.delayed(delay);
+    }
+    if (isRequestedCancelled()) {
+      logPrint?.call('Request was cancelled. Cancel retrying.');
+      return super.onError(err, handler);
     }
 
     try {

@@ -19,7 +19,7 @@ void main() {
 
     try {
       await dio.fetch<dynamic>(request);
-    } catch(_) {
+    } catch (_) {
       exceptionThrown = true;
     }
 

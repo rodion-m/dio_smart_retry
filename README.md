@@ -11,7 +11,7 @@ Also, it supports dynamic delay between retries. \
 
 ## Getting started
 
-1. Add package to pubspec.yaml: `dio_smart_retry: ^1.3.1`
+1. Add package to pubspec.yaml: `dio_smart_retry: ^1.3.2`
 2. Import package: `import 'package:dio_smart_retry/dio_smart_retry.dart'`
 
 ## Usage

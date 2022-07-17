@@ -4,7 +4,6 @@ import 'package:dio_smart_retry/src/http_status_codes.dart';
 
 Future<dynamic> main() async {
   final dio = Dio();
-
   // Add the interceptor
   dio.interceptors.add(
     RetryInterceptor(
@@ -18,10 +17,10 @@ Future<dynamic> main() async {
         Duration(seconds: 3), // wait 3 sec before the third retry
         Duration(seconds: 4), // wait 4 sec before the fourth retry
       ],
-      retryableExtraStatuses: { status401Unauthorized },
+      retryableExtraStatuses: {status401Unauthorized},
     ),
   );
 
-  /// Sending a failing request for 3 times with 1s, then 2s, then 3s interval
+  /// Sending a failing request for 4 times from 1s to 4s
   await dio.get<dynamic>('https://mock.codes/401');
 }
