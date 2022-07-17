@@ -1,4 +1,4 @@
-## 1.3.0
+## 1.3.1
 - Add a feature allowing to specify extra retryable status codes (parameter `retryableExtraStatuses`) (#11)
 - Update dependencies
 

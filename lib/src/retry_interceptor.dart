@@ -21,16 +21,17 @@ class RetryInterceptor extends Interceptor {
     RetryEvaluator? retryEvaluator,
     this.ignoreRetryEvaluatorExceptions = false,
     this.retryableExtraStatuses = const {},
-  }) : _retryEvaluator = retryEvaluator ?? DefaultRetryEvaluator({
-        ...defaultRetryableStatuses,
-        ...retryableExtraStatuses,
-      }).evaluate {
-    if(retryEvaluator != null && retryableExtraStatuses.isNotEmpty) {
+  }) : _retryEvaluator = retryEvaluator ??
+            DefaultRetryEvaluator({
+              ...defaultRetryableStatuses,
+              ...retryableExtraStatuses,
+            }).evaluate {
+    if (retryEvaluator != null && retryableExtraStatuses.isNotEmpty) {
       throw ArgumentError(
-          '[retryableExtraStatuses] works only if [retryEvaluator] is null.'
-              ' Set either [retryableExtraStatuses] or [retryEvaluator].'
-              ' Not both.',
-          'retryableExtraStatuses',
+        '[retryableExtraStatuses] works only if [retryEvaluator] is null.'
+            ' Set either [retryableExtraStatuses] or [retryEvaluator].'
+            ' Not both.',
+        'retryableExtraStatuses',
       );
     }
   }
@@ -72,15 +73,15 @@ class RetryInterceptor extends Interceptor {
   /// Redirects to [DefaultRetryEvaluator.evaluate]
   ///   with [defaultRetryableStatuses]
   static final FutureOr<bool> Function(DioError error, int attempt)
-    defaultRetryEvaluator =
+      defaultRetryEvaluator =
       DefaultRetryEvaluator(defaultRetryableStatuses).evaluate;
 
   Future<bool> _shouldRetry(DioError error, int attempt) async {
     try {
       return await _retryEvaluator(error, attempt);
-    } catch(e) {
+    } catch (e) {
       logPrint?.call('There was an exception in _retryEvaluator: $e');
-      if(!ignoreRetryEvaluatorExceptions) {
+      if (!ignoreRetryEvaluatorExceptions) {
         rethrow;
       }
     }
@@ -115,7 +116,8 @@ class RetryInterceptor extends Interceptor {
     }
 
     try {
-      await dio.fetch<void>(err.requestOptions)
+      await dio
+          .fetch<void>(err.requestOptions)
           .then((value) => handler.resolve(value));
     } on DioError catch (e) {
       super.onError(e, handler);

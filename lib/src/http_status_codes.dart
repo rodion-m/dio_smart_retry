@@ -121,5 +121,5 @@ const retryableStatuses = defaultRetryableStatuses;
 // For backward compatibility purpose
 /// Be careful: this method do not
 ///   take into account [RetryInterceptor.retryableExtraStatuses]
-bool isRetryable(int statusCode)
-  => defaultRetryableStatuses.contains(statusCode);
+bool isRetryable(int statusCode) =>
+    defaultRetryableStatuses.contains(statusCode);
