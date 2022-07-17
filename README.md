@@ -64,3 +64,9 @@ final request = RequestOptions(path: '/')
   ..disableRetry = true;
 await dio.fetch<String>(request);
 ```
+or
+```dart
+final options = Options()
+  ..disableRetry = true;
+await dio.get<String>('/', options: options);
+```
