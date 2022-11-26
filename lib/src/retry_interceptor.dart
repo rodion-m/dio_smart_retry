@@ -123,8 +123,8 @@ class RetryInterceptor extends Interceptor {
 
     try {
       RequestOptions requestOptions = err.requestOptions;
-      if (err.requestOptions.data is FormData) {
-        final formData = err.requestOptions.data as FormData;
+      if (requestOptions.data is FormData) {
+        final formData = requestOptions.data as FormData;
         final newFormData = FormData();
         newFormData.fields.addAll(formData.fields);
         newFormData.files.addAll(formData.files);
