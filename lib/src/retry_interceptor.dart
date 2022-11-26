@@ -123,7 +123,7 @@ class RetryInterceptor extends Interceptor {
 
     try {
       await dio
-          .fetch<void>(err.requestOptions)
+          .fetch<void>(err.requestOptions.copyWith())
           .then((value) => handler.resolve(value));
     } on DioError catch (e) {
       super.onError(e, handler);
