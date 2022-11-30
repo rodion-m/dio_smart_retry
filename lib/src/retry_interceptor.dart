@@ -122,8 +122,16 @@ class RetryInterceptor extends Interceptor {
     }
 
     try {
+      RequestOptions requestOptions = err.requestOptions;
+      if (requestOptions.data is FormData) {
+        final formData = requestOptions.data as FormData;
+        final newFormData = FormData();
+        newFormData.fields.addAll(formData.fields);
+        newFormData.files.addAll(formData.files);
+        requestOptions = requestOptions.copyWith(data: newFormData);
+      }
       await dio
-          .fetch<void>(err.requestOptions.copyWith())
+          .fetch<void>(requestOptions)
           .then((value) => handler.resolve(value));
     } on DioError catch (e) {
       super.onError(e, handler);
