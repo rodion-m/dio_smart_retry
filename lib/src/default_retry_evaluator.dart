@@ -6,6 +6,7 @@ class DefaultRetryEvaluator {
   DefaultRetryEvaluator(this._retryableStatuses);
 
   final Set<int> _retryableStatuses;
+  int currentAttempt = 0;
 
   /// Returns true only if the response hasn't been cancelled
   ///   or got a bad status code.
@@ -23,6 +24,7 @@ class DefaultRetryEvaluator {
       shouldRetry =
           error.type != DioErrorType.cancel && error.error is! FormatException;
     }
+    currentAttempt = attempt;
     return shouldRetry;
   }
 

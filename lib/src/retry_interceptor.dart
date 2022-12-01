@@ -4,6 +4,8 @@ import 'package:dio/dio.dart';
 
 import 'package:dio_smart_retry/src/default_retry_evaluator.dart';
 import 'package:dio_smart_retry/src/http_status_codes.dart';
+import 'package:dio_smart_retry/src/multipart_file_recreatable.dart';
+import 'package:dio_smart_retry/src/retry_not_supported_exception.dart';
 
 typedef RetryEvaluator = FutureOr<bool> Function(DioError error, int attempt);
 
@@ -93,8 +95,8 @@ class RetryInterceptor extends Interceptor {
     if (err.requestOptions.disableRetry) {
       return super.onError(err, handler);
     }
-    bool isRequestedCancelled() =>
-        err.requestOptions.cancelToken?.isCancelled == true;
+    bool isRequestCancelled() =>
+        err.requestOptions.cancelToken?.isCancelled ?? false;
 
     final attempt = err.requestOptions._attempt + 1;
     final shouldRetry = attempt <= retries && await _shouldRetry(err, attempt);
@@ -113,23 +115,27 @@ class RetryInterceptor extends Interceptor {
       'error: ${err.error})',
     );
 
+    var requestOptions = err.requestOptions;
+    if (requestOptions.data is FormData) {
+      try {
+        requestOptions = _recreateOptions(err.requestOptions);
+      } on RetryNotSupportedException catch (e) {
+        return super.onError(
+          DioError(requestOptions: requestOptions, error: e),
+          handler,
+        );
+      }
+    }
+
     if (delay != Duration.zero) {
       await Future<void>.delayed(delay);
     }
-    if (isRequestedCancelled()) {
+    if (isRequestCancelled()) {
       logPrint?.call('Request was cancelled. Cancel retrying.');
       return super.onError(err, handler);
     }
 
     try {
-      RequestOptions requestOptions = err.requestOptions;
-      if (requestOptions.data is FormData) {
-        final formData = requestOptions.data as FormData;
-        final newFormData = FormData();
-        newFormData.fields.addAll(formData.fields);
-        newFormData.files.addAll(formData.files);
-        requestOptions = requestOptions.copyWith(data: newFormData);
-      }
       await dio
           .fetch<void>(requestOptions)
           .then((value) => handler.resolve(value));
@@ -143,6 +149,30 @@ class RetryInterceptor extends Interceptor {
     return attempt - 1 < retryDelays.length
         ? retryDelays[attempt - 1]
         : retryDelays.last;
+  }
+
+  RequestOptions _recreateOptions(RequestOptions requestOptions) {
+    if (requestOptions.data is! FormData) {
+      throw ArgumentError(
+        'requestOptions.data is not FormData',
+        'requestOptions',
+      );
+    }
+    final formData = requestOptions.data as FormData;
+    final newFormData = FormData();
+    newFormData.fields.addAll(formData.fields);
+    for (final pair in formData.files) {
+      final file = pair.value;
+      if (file is MultipartFileRecreatable) {
+        newFormData.files.add(MapEntry(pair.key, file.recreate()));
+      } else {
+        throw RetryNotSupportedException(
+          'Use MultipartFileRecreatable class '
+          'instead of MultipartFile to make retry available',
+        );
+      }
+    }
+    return requestOptions.copyWith(data: newFormData);
   }
 }
 

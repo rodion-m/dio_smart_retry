@@ -6,7 +6,8 @@ import 'package:test/test.dart';
 void main() {
   test('Request with disabledRetry option is not retried', () async {
     final dio = Dio();
-    var retryEvaluatorCalled = false, exceptionThrown = false;
+    var retryEvaluatorCalled = false;
+    var exceptionThrown = false;
     dio.interceptors.add(
       RetryInterceptor(
         dio: dio,
