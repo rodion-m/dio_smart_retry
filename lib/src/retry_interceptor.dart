@@ -38,6 +38,9 @@ class RetryInterceptor extends Interceptor {
     }
   }
 
+  static const _multipartRetryHelpLink
+    = 'https://github.com/rodion-m/dio_smart_retry#retry-requests-with-multipartform-data';
+
   /// The original dio
   final Dio dio;
 
@@ -88,6 +91,12 @@ class RetryInterceptor extends Interceptor {
       }
     }
     return true;
+  }
+
+  @override
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    _printErrorIfRequestHasMultipartFile(options);
+    super.onRequest(options, handler);
   }
 
   @override
@@ -151,14 +160,14 @@ class RetryInterceptor extends Interceptor {
         : retryDelays.last;
   }
 
-  RequestOptions _recreateOptions(RequestOptions requestOptions) {
-    if (requestOptions.data is! FormData) {
+  RequestOptions _recreateOptions(RequestOptions options) {
+    if (options.data is! FormData) {
       throw ArgumentError(
         'requestOptions.data is not FormData',
         'requestOptions',
       );
     }
-    final formData = requestOptions.data as FormData;
+    final formData = options.data as FormData;
     final newFormData = FormData();
     newFormData.fields.addAll(formData.fields);
     for (final pair in formData.files) {
@@ -168,11 +177,30 @@ class RetryInterceptor extends Interceptor {
       } else {
         throw RetryNotSupportedException(
           'Use MultipartFileRecreatable class '
-          'instead of MultipartFile to make retry available',
+          'instead of MultipartFile to make retry available. '
+          'See: $_multipartRetryHelpLink',
         );
       }
     }
-    return requestOptions.copyWith(data: newFormData);
+    return options.copyWith(data: newFormData);
+  }
+
+  var _multipartFileChecked = false;
+  void _printErrorIfRequestHasMultipartFile(RequestOptions options) {
+    if(_multipartFileChecked) return;
+    if (options.data is FormData) {
+      final data = options.data as FormData;
+      if (data.files.any((pair) => pair.value is! MultipartFileRecreatable)) {
+        final printer = logPrint ?? print;
+        printer(
+            'WARNING: Retry is not supported for MultipartFile class. '
+            'Use MultipartFileRecreatable class '
+            'instead of MultipartFile to make retry available. '
+            'See: $_multipartRetryHelpLink',
+        );
+      }
+    }
+    _multipartFileChecked = true;
   }
 }
 

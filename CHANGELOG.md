@@ -1,3 +1,7 @@
+## 1.4.0
+- Add supporting of retrying for requests with `multipart/form-data`, use `MultipartFileRecreatable` class for that ([details](https://github.com/rodion-m/dio_smart_retry#retry-requests-with-multipartform-data)).
+- `DefaultRetryEvaluator` and status codes constants from the file `http_status_codes.dart` was made a part of the public API.
+
 ## 1.3.2
 - Add a feature allowing to specify extra retryable status codes (parameter `retryableExtraStatuses`) (#11)
 - Add a request's `CancelToken` checking

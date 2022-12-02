@@ -3,13 +3,23 @@
 [![style: very good analysis](https://img.shields.io/badge/style-very_good_analysis-B22C89.svg)](https://pub.dev/packages/very_good_analysis)
 [![License](https://img.shields.io/github/license/rodion-m/dio_smart_retry)](https://github.com/rodion-m/dio_smart_retry/blob/master/LICENSE)
 
-## Dio Smart Retry
+# Dio Smart Retry
 Flexible retry library for Dio package. This is a next generation of an abandoned `dio_retry` package. \
 By default, the request will be retried only for appropriate retryable http statuses. \
 Also, it supports dynamic delay between retries. \
 **Null Safety.**
 
-## Getting started
+## Contents
+
+* [Getting Started](#getting-started)
+* [Usage](#usage)
+* [Default retryable status codes list](#default-retryable-status-codes-list)
+* [Disable retry](#disable-retry)
+* [Add extra retryable status codes](#add-extra-retryable-status-codes)
+* [Override retryable statuses](#override-retryable-statuses)
+* [Retry requests with `multipart/form-data`](#retry-requests-with-multipartform-data)
+
+## Getting Started
 
 1. Add package to pubspec.yaml: `dio_smart_retry: ^1.4.0`
 2. Import package: `import 'package:dio_smart_retry/dio_smart_retry.dart'`
@@ -56,6 +66,7 @@ Responses with these http status codes will be retried by default:
 * 527: RailgunError
 * 598: NetworkReadTimeoutError
 * 599: NetworkConnectTimeoutError
+[It's possible to override this list](#override-retryable-statuses)
 
 ## Disable retry
 It's possible to manually disable retry for a specified request. Use `disableRetry` extension for that:
