@@ -4,15 +4,15 @@ version: 1.4.0
 repository: https://github.com/rodion-m/dio_smart_retry
 issue_tracker: https://github.com/rodion-m/dio_smart_retry/issues
 homepage: https://github.com/rodion-m/dio_smart_retry
-documentation: https://github.com/rodion-m/dio_smart_retry
+documentation: https://github.com/rodion-m/dio_smart_retry#contents
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   dio: ^4.0.6
-  http_parser: any
-  path: any
+  http_parser: ^4.0.2
+  path: ^1.8.2
 
 dev_dependencies:
   dart_code_metrics: ^5.1.0
