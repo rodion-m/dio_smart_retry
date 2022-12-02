@@ -11,7 +11,7 @@ Also, it supports dynamic delay between retries. \
 
 ## Getting started
 
-1. Add package to pubspec.yaml: `dio_smart_retry: ^1.3.2`
+1. Add package to pubspec.yaml: `dio_smart_retry: ^1.4.0`
 2. Import package: `import 'package:dio_smart_retry/dio_smart_retry.dart'`
 
 ## Usage
@@ -86,3 +86,32 @@ RetryInterceptor(
   retryableExtraStatuses: { 401 },
 )
 ```
+
+## Override retryable statuses
+It's possible to override default retryable status codes list. Just make new instance of `DefaultRetryEvaluator` and pass your status codes there. \
+Here is an example:
+```dart
+final myStatuses = { status400BadRequest, status409Conflict };
+dio.interceptors.add(
+  RetryInterceptor(
+    dio: dio,
+    logPrint: print,
+    retryEvaluator: DefaultRetryEvaluator(myStatuses).evaluate,
+  ),
+);
+
+await dio.get<dynamic>('https://mock.codes/400');
+```
+
+## Retry requests with `multipart/form-data`
+Because dio's class for multipart data `MultipartFile` doesn't support stream rewinding (recreation) to support retry for multipart data you should use a class `MultipartFileRecreatable` instead of `MultipartFile`. \
+Here is an example:
+```dart
+final formData =
+    FormData.fromMap({'file': MultipartFileRecreatable.fromFileSync('README.md')});
+  await dio.post<dynamic>(
+    'https://multipart.free.beeceptor.com/post500',
+    data: formData,
+  );
+```
+See the full example in the test: https://github.com/rodion-m/dio_smart_retry/blob/63a3bddae8b5a0581c35c4ae5e973996561d9100/test/multipart_retry_tests.dart#L32-L61
