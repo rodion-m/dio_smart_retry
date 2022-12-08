@@ -221,5 +221,6 @@ extension RequestOptionsX on RequestOptions {
 extension OptionsX on Options {
   bool get disableRetry => (extra?[_kDisableRetryKey] as bool?) ?? false;
 
-  set disableRetry(bool value) => extra?[_kDisableRetryKey] = value;
+  set disableRetry(bool value) =>
+      (extra ??= <String, dynamic>{})[_kDisableRetryKey] = value;
 }
