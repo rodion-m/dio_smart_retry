@@ -52,7 +52,7 @@ void main() {
         data: formData,
       );
     } on DioError catch (error) {
-      if (error.type != DioErrorType.response) {
+      if (error.type != DioErrorType.badResponse) {
         rethrow;
       }
     }
