@@ -1,7 +1,7 @@
 @TestOn('vm')
-import 'package:dio/dio.dart';
 import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:dio_smart_retry/src/retry_not_supported_exception.dart';
+import 'package:diox/diox.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -19,7 +19,7 @@ void main() {
         FormData.fromMap({'file': MultipartFile.fromFileSync('README.md')});
     try {
       await dio.post<dynamic>(
-        'https://multipart.free.beeceptor.com/post500',
+        'https://rodion-m.ru/mock/post500.php',
         data: formData,
       );
     } on DioError catch (error) {
@@ -48,7 +48,7 @@ void main() {
     });
     try {
       await dio.post<dynamic>(
-        'https://multipart.free.beeceptor.com/post500',
+        'https://rodion-m.ru/mock/post500.php',
         data: formData,
       );
     } on DioError catch (error) {

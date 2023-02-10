@@ -1,4 +1,6 @@
-import 'package:dio/dio.dart';
+import 'dart:async';
+
+import 'package:diox/diox.dart';
 import 'package:dio_smart_retry/dio_smart_retry.dart';
 
 Future<dynamic> main() async {

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:dio/dio.dart';
+import 'package:diox/diox.dart';
 
 class DefaultRetryEvaluator {
   DefaultRetryEvaluator(this._retryableStatuses);

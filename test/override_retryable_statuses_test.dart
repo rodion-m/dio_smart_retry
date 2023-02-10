@@ -1,6 +1,6 @@
 @TestOn('vm')
-import 'package:dio/dio.dart';
 import 'package:dio_smart_retry/dio_smart_retry.dart';
+import 'package:diox/diox.dart';
 import 'package:test/test.dart';
 
 void main() {
