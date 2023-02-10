@@ -18,3 +18,10 @@ dev_dependencies:
   dart_code_metrics: ^5.1.0
   test: ^1.22.0
   very_good_analysis: ^3.1.0
+
+dependency_overrides:
+  dio:
+    git:
+      url: https://github.com/cfug/diox
+      path: dio/
+      ref: dio

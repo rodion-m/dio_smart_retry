@@ -21,7 +21,7 @@ void main() {
     try {
       await dio.get<dynamic>('https://mock.codes/400');
     } on DioError catch (error) {
-      if (error.type != DioErrorType.response ||
+      if (error.type != DioErrorType.badResponse ||
           error.response?.statusCode != 400) {
         rethrow;
       }

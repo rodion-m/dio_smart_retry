@@ -13,7 +13,7 @@ class DefaultRetryEvaluator {
   // ignore: avoid-unused-parameters
   FutureOr<bool> evaluate(DioError error, int attempt) {
     bool shouldRetry;
-    if (error.type == DioErrorType.response) {
+    if (error.type == DioErrorType.badResponse) {
       final statusCode = error.response?.statusCode;
       if (statusCode != null) {
         shouldRetry = isRetryable(statusCode);
