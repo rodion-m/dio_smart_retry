@@ -1,4 +1,4 @@
-## 2.0.0-diox
+## 2.0.1-diox
 - Add supporting of [DioX](https://pub.dev/packages/diox)
 
 ## 1.4.0
