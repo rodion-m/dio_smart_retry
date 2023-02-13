@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:diox/diox.dart';
+import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:path/path.dart' as p;
 
