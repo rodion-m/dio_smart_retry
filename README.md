@@ -4,29 +4,26 @@
 [![License](https://img.shields.io/github/license/rodion-m/dio_smart_retry)](https://github.com/rodion-m/dio_smart_retry/blob/master/LICENSE)
 
 # Dio Smart Retry
-Flexible retry library for Dio and DioX package. This is a next generation of an abandoned `dio_retry` package. \
+Flexible retry library for Dio package. This is a next generation of an abandoned `dio_retry` package. \
 By default, the request will be retried only for appropriate retryable http statuses. \
 Also, it supports dynamic delay between retries. \
 **Null Safety.**
 
 ## Contents
 
-* [Getting Started](#getting-started)
-* [Usage](#usage)
-* [Default retryable status codes list](#default-retryable-status-codes-list)
-* [Disable retry](#disable-retry)
-* [Add extra retryable status codes](#add-extra-retryable-status-codes)
-* [Override retryable statuses](#override-retryable-statuses)
-* [Retry requests with `multipart/form-data`](#retry-requests-with-multipartform-data)
+- [Dio Smart Retry](#dio-smart-retry)
+  - [Contents](#contents)
+  - [Getting Started for Dio](#getting-started-for-dio)
+  - [Usage](#usage)
+  - [Default retryable status codes list](#default-retryable-status-codes-list)
+  - [Disable retry](#disable-retry)
+  - [Add extra retryable status codes](#add-extra-retryable-status-codes)
+  - [Override retryable statuses](#override-retryable-statuses)
+  - [Retry requests with `multipart/form-data`](#retry-requests-with-multipartform-data)
 
 ## Getting Started for Dio
 
-1. Add package to pubspec.yaml: `dio_smart_retry: ^1.4.0`
-2. Import package: `import 'package:dio_smart_retry/dio_smart_retry.dart'`
-
-## Getting Started for DioX
-
-1. Add package to pubspec.yaml: `dio_smart_retry: ^2.0.1-diox`
+1. Add package to pubspec.yaml: `dio_smart_retry: ^2.1.0`
 2. Import package: `import 'package:dio_smart_retry/dio_smart_retry.dart'`
 
 ## Usage

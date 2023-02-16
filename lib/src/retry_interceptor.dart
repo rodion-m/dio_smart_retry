@@ -1,10 +1,10 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:dio_smart_retry/src/default_retry_evaluator.dart';
 import 'package:dio_smart_retry/src/http_status_codes.dart';
 import 'package:dio_smart_retry/src/multipart_file_recreatable.dart';
 import 'package:dio_smart_retry/src/retry_not_supported_exception.dart';
-import 'package:diox/diox.dart';
 
 typedef RetryEvaluator = FutureOr<bool> Function(DioError error, int attempt);
 
@@ -37,8 +37,8 @@ class RetryInterceptor extends Interceptor {
     }
   }
 
-  static const _multipartRetryHelpLink
-    = 'https://github.com/rodion-m/dio_smart_retry#retry-requests-with-multipartform-data';
+  static const _multipartRetryHelpLink =
+      'https://github.com/rodion-m/dio_smart_retry#retry-requests-with-multipartform-data';
 
   /// The original dio
   final Dio dio;
@@ -186,16 +186,16 @@ class RetryInterceptor extends Interceptor {
 
   var _multipartFileChecked = false;
   void _printErrorIfRequestHasMultipartFile(RequestOptions options) {
-    if(_multipartFileChecked) return;
+    if (_multipartFileChecked) return;
     if (options.data is FormData) {
       final data = options.data as FormData;
       if (data.files.any((pair) => pair.value is! MultipartFileRecreatable)) {
         final printer = logPrint ?? print;
         printer(
-            'WARNING: Retry is not supported for MultipartFile class. '
-            'Use MultipartFileRecreatable class '
-            'instead of MultipartFile to make retry available. '
-            'See: $_multipartRetryHelpLink',
+          'WARNING: Retry is not supported for MultipartFile class. '
+          'Use MultipartFileRecreatable class '
+          'instead of MultipartFile to make retry available. '
+          'See: $_multipartRetryHelpLink',
         );
       }
     }

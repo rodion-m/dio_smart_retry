@@ -1,6 +1,6 @@
 name: dio_smart_retry
-description: Retry library for Dio and DioX package made with love. By default, the request will be retried only for appropriate retryable http statuses.
-version: 2.0.1-diox
+description: Retry library for Dio and Dio package made with love. By default, the request will be retried only for appropriate retryable http statuses.
+version: 2.0.1
 repository: https://github.com/rodion-m/dio_smart_retry
 issue_tracker: https://github.com/rodion-m/dio_smart_retry/issues
 homepage: https://github.com/rodion-m/dio_smart_retry
@@ -10,7 +10,7 @@ environment:
   sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
-  diox: ^5.0.0
+  dio: ^5.0.0
   http_parser: ^4.0.2
   path: ^1.8.2
 
