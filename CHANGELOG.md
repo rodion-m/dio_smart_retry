@@ -1,3 +1,6 @@
+## 5.0.0
+- Add supporting of the new dio 5.+
+
 ## 2.0.1-diox
 - Add supporting of [DioX](https://pub.dev/packages/diox)
 

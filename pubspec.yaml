@@ -1,6 +1,6 @@
 name: dio_smart_retry
 description: Retry library for Dio and Dio package made with love. By default, the request will be retried only for appropriate retryable http statuses.
-version: 2.0.1
+version: 5.0.0
 repository: https://github.com/rodion-m/dio_smart_retry
 issue_tracker: https://github.com/rodion-m/dio_smart_retry/issues
 homepage: https://github.com/rodion-m/dio_smart_retry
@@ -15,6 +15,6 @@ dependencies:
   path: ^1.8.2
 
 dev_dependencies:
-  dart_code_metrics: ^5.5.1
+  dart_code_metrics: ^5.6.0
   test: ^1.23.1
   very_good_analysis: ^4.0.0+1

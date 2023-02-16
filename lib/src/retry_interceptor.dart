@@ -35,6 +35,12 @@ class RetryInterceptor extends Interceptor {
         'retryableExtraStatuses',
       );
     }
+    if(retries < 0) {
+      throw ArgumentError(
+        '[retries] cannot be less than 0',
+        'retries',
+      );
+    }
   }
 
   static const _multipartRetryHelpLink =
@@ -120,7 +126,7 @@ class RetryInterceptor extends Interceptor {
       'trying again '
       '(attempt: $attempt/$retries, '
       'wait ${delay.inMilliseconds} ms, '
-      'error: ${err.error})',
+      'error: ${err.error ?? err})',
     );
 
     var requestOptions = err.requestOptions;

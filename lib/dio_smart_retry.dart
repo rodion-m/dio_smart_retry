@@ -1,4 +1,4 @@
-/// Retry library for Dio and DioX package made with love
+/// Retry library for Dio package made with love
 library dio_smart_retry;
 
 export 'src/default_retry_evaluator.dart';
