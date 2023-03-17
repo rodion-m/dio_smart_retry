@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:isolate';
 import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:path/path.dart' as p;
@@ -32,6 +33,19 @@ class MultipartFileRecreatable extends MultipartFile {
       contentType: contentType,
     );
   }
+
+  static Future<MultipartFileRecreatable> fromFileIsolate(
+    String filePath, {
+    String? filename,
+    MediaType? contentType,
+  }) =>
+      Isolate.run(
+        () => fromFileSync(
+          filePath,
+          filename: filename,
+          contentType: contentType,
+        ),
+      );
 
   MultipartFileRecreatable recreate() => fromFileSync(
         filePath,

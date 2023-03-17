@@ -5,6 +5,7 @@ import 'package:dio_smart_retry/src/default_retry_evaluator.dart';
 import 'package:dio_smart_retry/src/http_status_codes.dart';
 import 'package:dio_smart_retry/src/multipart_file_recreatable.dart';
 import 'package:dio_smart_retry/src/retry_not_supported_exception.dart';
+import 'package:http_parser/http_parser.dart';
 
 typedef RetryEvaluator = FutureOr<bool> Function(DioError error, int attempt);
 
@@ -35,7 +36,7 @@ class RetryInterceptor extends Interceptor {
         'retryableExtraStatuses',
       );
     }
-    if(retries < 0) {
+    if (retries < 0) {
       throw ArgumentError(
         '[retries] cannot be less than 0',
         'retries',
@@ -132,7 +133,7 @@ class RetryInterceptor extends Interceptor {
     var requestOptions = err.requestOptions;
     if (requestOptions.data is FormData) {
       try {
-        requestOptions = _recreateOptions(err.requestOptions);
+        requestOptions = await _recreateOptions(err.requestOptions);
       } on RetryNotSupportedException catch (e) {
         return super.onError(
           DioError(requestOptions: requestOptions, error: e),
@@ -165,7 +166,7 @@ class RetryInterceptor extends Interceptor {
         : retryDelays.last;
   }
 
-  RequestOptions _recreateOptions(RequestOptions options) {
+  FutureOr<RequestOptions> _recreateOptions(RequestOptions options) async {
     if (options.data is! FormData) {
       throw ArgumentError(
         'requestOptions.data is not FormData',
@@ -178,7 +179,15 @@ class RetryInterceptor extends Interceptor {
     for (final pair in formData.files) {
       final file = pair.value;
       if (file is MultipartFileRecreatable) {
-        newFormData.files.add(MapEntry(pair.key, file.recreate()));
+        final filePath = file.filePath;
+        final mediaType = file.contentType;
+        final fileName = file.filename;
+        final multiPartfile = await MultipartFileRecreatable.fromFileIsolate(
+          filePath,
+          contentType: mediaType,
+          filename: fileName,
+        );
+        newFormData.files.add(MapEntry(pair.key, multiPartfile));
       } else {
         throw RetryNotSupportedException(
           'Use MultipartFileRecreatable class '
