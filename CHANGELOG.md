@@ -6,8 +6,7 @@
 - Adds a new `MultipartFileRecreatable.fromBytes` factory compatible with web.
 - Added a new `headers` parameter.
 - You can now read the file's content with `MultipartFileRecreatable.data`.
-- **Breaking:** Renamed `filename` to `fileName`.
-- **Breaking:** `fileName` is now a named parameter.
+- **Breaking:** `filename` is now a named parameter.
 - **Breaking:** Removed `MultipartFileRecreatable.filePath`.
 
 ## 5.0.0

@@ -18,14 +18,14 @@ class MultipartFileRecreatable extends MultipartFile {
   /// Creates a [MultipartFileRecreatable] object with [bytes].
   factory MultipartFileRecreatable.fromBytes(
     List<int> bytes, {
-    String? fileName,
+    String? filename,
     MediaType? contentType,
     Map<String, List<String>>? headers,
   }) {
     return MultipartFileRecreatable(
       Stream.fromIterable(<List<int>>[bytes]),
       bytes.length,
-      filename: fileName,
+      filename: filename,
       contentType: contentType,
       headers: headers,
     );
@@ -34,18 +34,18 @@ class MultipartFileRecreatable extends MultipartFile {
   /// Creates a [MultipartFileRecreatable] object from a [File] in [filePath].
   factory MultipartFileRecreatable.fromFileSync(
     String filePath, {
-    String? fileName,
+    String? filename,
     MediaType? contentType,
     Map<String, List<String>>? headers,
   }) {
-    fileName ??= p.basename(filePath);
+    filename ??= p.basename(filePath);
     final file = File(filePath);
     final length = file.lengthSync();
     final stream = file.openRead();
     return MultipartFileRecreatable(
       stream,
       length,
-      filename: fileName,
+      filename: filename,
       contentType: contentType,
       headers: headers,
     );
