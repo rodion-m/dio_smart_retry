@@ -1,7 +1,7 @@
 ## 5.1.0
 - Updated internal libraries.
 - Bumped minimum Dart SDK to 2.17.
-- Added `MultipartFileRecreatablep documentation.
+- Added `MultipartFileRecreatable` documentation.
 - Refactors static constructors to factories.
 - Adds a new `MultipartFileRecreatable.fromBytes` factory compatible with web.
 - Added a new `headers` parameter.
