@@ -35,7 +35,7 @@ class RetryInterceptor extends Interceptor {
         'retryableExtraStatuses',
       );
     }
-    if(retries < 0) {
+    if (retries < 0) {
       throw ArgumentError(
         '[retries] cannot be less than 0',
         'retries',
