@@ -23,7 +23,7 @@ Also, it supports dynamic delay between retries. \
 
 ## Getting Started for Dio
 
-1. Add package to pubspec.yaml: `dio_smart_retry: ^5.0.0` **
+1. Add package to pubspec.yaml: `dio_smart_retry: ^5.0.1` **
 2. Import package: `import 'package:dio_smart_retry/dio_smart_retry.dart'`
 
 ** For the old dio (ver. 4.+) use `dio_smart_retry: ^1.4.0`
