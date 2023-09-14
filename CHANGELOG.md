@@ -1,3 +1,6 @@
+## 5.0.1
+- Replaced deprecated members of `dio` package
+
 ## 5.0.0
 - Add supporting of the new dio 5.+
 
