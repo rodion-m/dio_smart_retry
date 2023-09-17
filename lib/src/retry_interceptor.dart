@@ -86,7 +86,7 @@ class RetryInterceptor extends Interceptor {
       defaultRetryEvaluator =
       DefaultRetryEvaluator(defaultRetryableStatuses).evaluate;
 
-  Future<bool> _shouldRetry(DioError error, int attempt) async {
+  Future<bool> _shouldRetry(DioException error, int attempt) async {
     try {
       return await _retryEvaluator(error, attempt);
     } catch (e) {
@@ -105,7 +105,7 @@ class RetryInterceptor extends Interceptor {
   }
 
   @override
-  Future<dynamic> onError(DioError err, ErrorInterceptorHandler handler) async {
+  Future<dynamic> onError(DioException err, ErrorInterceptorHandler handler) async {
     if (err.requestOptions.disableRetry) {
       return super.onError(err, handler);
     }
@@ -135,7 +135,7 @@ class RetryInterceptor extends Interceptor {
         requestOptions = _recreateOptions(err.requestOptions);
       } on RetryNotSupportedException catch (e) {
         return super.onError(
-          DioError(requestOptions: requestOptions, error: e),
+          DioException(requestOptions: requestOptions, error: e),
           handler,
         );
       }
@@ -153,7 +153,9 @@ class RetryInterceptor extends Interceptor {
       await dio
           .fetch<void>(requestOptions)
           .then((value) => handler.resolve(value));
-    } on DioError catch (e) {
+    } on DioException catch (e) {
+      err.requestOptions._attempt = attempt;
+
       super.onError(e, handler);
     }
   }
@@ -209,14 +211,13 @@ class RetryInterceptor extends Interceptor {
   }
 }
 
-const _kDisableRetryKey = 'ro_disable_retry';
+const String _kDisableRetryKey = 'ro_disable_retry';
+const String dioSmartRetryAttemptKey = 'ro_attempt';
 
 extension RequestOptionsX on RequestOptions {
-  static const _kAttemptKey = 'ro_attempt';
+  int get _attempt => (extra[dioSmartRetryAttemptKey] as int?) ?? 0;
 
-  int get _attempt => (extra[_kAttemptKey] as int?) ?? 0;
-
-  set _attempt(int value) => extra[_kAttemptKey] = value;
+  set _attempt(int value) => extra[dioSmartRetryAttemptKey] = value;
 
   bool get disableRetry => (extra[_kDisableRetryKey] as bool?) ?? false;
 
