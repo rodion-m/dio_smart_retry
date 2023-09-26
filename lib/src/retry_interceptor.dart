@@ -35,7 +35,7 @@ class RetryInterceptor extends Interceptor {
         'retryableExtraStatuses',
       );
     }
-    if(retries < 0) {
+    if (retries < 0) {
       throw ArgumentError(
         '[retries] cannot be less than 0',
         'retries',
@@ -191,6 +191,7 @@ class RetryInterceptor extends Interceptor {
   }
 
   var _multipartFileChecked = false;
+
   void _printErrorIfRequestHasMultipartFile(RequestOptions options) {
     if (_multipartFileChecked) return;
     if (options.data is FormData) {
@@ -226,6 +227,8 @@ extension RequestOptionsX on RequestOptions {
 extension OptionsX on Options {
   bool get disableRetry => (extra?[_kDisableRetryKey] as bool?) ?? false;
 
-  set disableRetry(bool value) =>
-      (extra ??= <String, dynamic>{})[_kDisableRetryKey] = value;
+  set disableRetry(bool value) {
+    extra = Map.of(extra ??= <String, dynamic>{});
+    extra![_kDisableRetryKey] = value;
+  }
 }
