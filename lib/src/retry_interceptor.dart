@@ -1,12 +1,13 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:dio_smart_retry/src/default_retry_evaluator.dart';
-import 'package:dio_smart_retry/src/http_status_codes.dart';
-import 'package:dio_smart_retry/src/multipart_file_recreatable.dart';
+import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:dio_smart_retry/src/retry_not_supported_exception.dart';
 
-typedef RetryEvaluator = FutureOr<bool> Function(DioError error, int attempt);
+typedef RetryEvaluator = FutureOr<bool> Function(
+  DioException error,
+  int attempt,
+);
 
 /// An interceptor that will try to send failed request again
 class RetryInterceptor extends Interceptor {
@@ -35,7 +36,7 @@ class RetryInterceptor extends Interceptor {
         'retryableExtraStatuses',
       );
     }
-    if(retries < 0) {
+    if (retries < 0) {
       throw ArgumentError(
         '[retries] cannot be less than 0',
         'retries',
@@ -82,14 +83,14 @@ class RetryInterceptor extends Interceptor {
 
   /// Redirects to [DefaultRetryEvaluator.evaluate]
   ///   with [defaultRetryableStatuses]
-  static final FutureOr<bool> Function(DioError error, int attempt)
+  static final FutureOr<bool> Function(DioException error, int attempt)
       defaultRetryEvaluator =
       DefaultRetryEvaluator(defaultRetryableStatuses).evaluate;
 
-  Future<bool> _shouldRetry(DioError error, int attempt) async {
+  Future<bool> _shouldRetry(DioException error, int attempt) async {
     try {
       return await _retryEvaluator(error, attempt);
-    } catch (e) {
+    } on Object catch (e) {
       logPrint?.call('There was an exception in _retryEvaluator: $e');
       if (!ignoreRetryEvaluatorExceptions) {
         rethrow;
@@ -99,13 +100,19 @@ class RetryInterceptor extends Interceptor {
   }
 
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+  void onRequest(
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) {
     _printErrorIfRequestHasMultipartFile(options);
     super.onRequest(options, handler);
   }
 
   @override
-  Future<dynamic> onError(DioError err, ErrorInterceptorHandler handler) async {
+  Future<dynamic> onError(
+    DioException err,
+    ErrorInterceptorHandler handler,
+  ) async {
     if (err.requestOptions.disableRetry) {
       return super.onError(err, handler);
     }
@@ -135,7 +142,7 @@ class RetryInterceptor extends Interceptor {
         requestOptions = _recreateOptions(err.requestOptions);
       } on RetryNotSupportedException catch (e) {
         return super.onError(
-          DioError(requestOptions: requestOptions, error: e),
+          DioException(requestOptions: requestOptions, error: e),
           handler,
         );
       }
@@ -150,10 +157,8 @@ class RetryInterceptor extends Interceptor {
     }
 
     try {
-      await dio
-          .fetch<void>(requestOptions)
-          .then((value) => handler.resolve(value));
-    } on DioError catch (e) {
+      await dio.fetch<void>(requestOptions).then(handler.resolve);
+    } on DioException catch (e) {
       super.onError(e, handler);
     }
   }

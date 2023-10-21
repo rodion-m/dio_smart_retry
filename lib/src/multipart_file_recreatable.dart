@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
@@ -10,8 +9,9 @@ class MultipartFileRecreatable extends MultipartFile {
     int length,
     String? filename,
     this.filePath, {
-    MediaType? contentType,
-  }) : super(stream, length, filename: filename, contentType: contentType);
+    super.contentType,
+  }) : super.fromStream(stream.asBroadcastStream, length, filename: filename);
+
   final String filePath;
 
   // ignore: prefer_constructors_over_static_methods

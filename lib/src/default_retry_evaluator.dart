@@ -10,10 +10,9 @@ class DefaultRetryEvaluator {
 
   /// Returns true only if the response hasn't been cancelled
   ///   or got a bad status code.
-  // ignore: avoid-unused-parameters
-  FutureOr<bool> evaluate(DioError error, int attempt) {
+  FutureOr<bool> evaluate(DioException error, int attempt) {
     bool shouldRetry;
-    if (error.type == DioErrorType.badResponse) {
+    if (error.type == DioExceptionType.badResponse) {
       final statusCode = error.response?.statusCode;
       if (statusCode != null) {
         shouldRetry = isRetryable(statusCode);
@@ -21,8 +20,8 @@ class DefaultRetryEvaluator {
         shouldRetry = true;
       }
     } else {
-      shouldRetry =
-          error.type != DioErrorType.cancel && error.error is! FormatException;
+      shouldRetry = error.type != DioExceptionType.cancel &&
+          error.error is! FormatException;
     }
     currentAttempt = attempt;
     return shouldRetry;

@@ -21,6 +21,9 @@
 .idea/**/uiDesigner.xml
 .idea/**/dbnavigator.xml
 
+.vscode/
+.fvm/
+
 # Gradle
 .idea/**/gradle.xml
 .idea/**/libraries
