@@ -130,3 +130,29 @@ final formData =
   );
 ```
 See the full example in the test: https://github.com/rodion-m/dio_smart_retry/blob/63a3bddae8b5a0581c35c4ae5e973996561d9100/test/multipart_retry_tests.dart#L32-L61
+
+## Migrating to 6.0
+
+Version 6.0 introduces 2 breaking changes:
+- `MultipartFileRecreatable.filename` is now a named parameter
+- `MultipartFileRecreatable.filePath` is now removed
+
+To update to the latest version, if you were using the `MultipartFileRecreatable` constructor, remove the `filePath` parameter and change `filename` to a named parameter:
+
+Old:
+```dart
+return MultipartFileRecreatable(
+  stream,
+  length,
+  filename,
+  filePath,
+);
+```
+New:
+```dart
+return MultipartFileRecreatable(
+  stream,
+  length,
+  filename: filename,
+);
+```
