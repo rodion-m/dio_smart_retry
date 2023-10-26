@@ -221,13 +221,15 @@ const _kDisableRetryKey = 'ro_disable_retry';
 extension RequestOptionsX on RequestOptions {
   static const _kAttemptKey = 'ro_attempt';
 
-  int get _attempt => (extra[_kAttemptKey] as int?) ?? 0;
-
-  set _attempt(int value) => extra[_kAttemptKey] = value;
+  int get attempt => _attempt;
 
   bool get disableRetry => (extra[_kDisableRetryKey] as bool?) ?? false;
 
   set disableRetry(bool value) => extra[_kDisableRetryKey] = value;
+
+  int get _attempt => (extra[_kAttemptKey] as int?) ?? 0;
+
+  set _attempt(int value) => extra[_kAttemptKey] = value;
 }
 
 extension OptionsX on Options {
