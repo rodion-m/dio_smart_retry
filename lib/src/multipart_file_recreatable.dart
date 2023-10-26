@@ -4,21 +4,39 @@ import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:path/path.dart' as p;
 
+/// Creates an instance of [MultipartFile] that can be recreated and reused.
 class MultipartFileRecreatable extends MultipartFile {
+  /// Default constructor.
   MultipartFileRecreatable(
-    Stream<List<int>> stream,
-    int length,
-    String? filename,
-    this.filePath, {
-    MediaType? contentType,
-  }) : super(stream, length, filename: filename, contentType: contentType);
-  final String filePath;
+    super.stream,
+    super.length, {
+    super.filename,
+    super.contentType,
+    super.headers,
+  }) : data = stream;
 
-  // ignore: prefer_constructors_over_static_methods
-  static MultipartFileRecreatable fromFileSync(
+  /// Creates a [MultipartFileRecreatable] object with [bytes].
+  factory MultipartFileRecreatable.fromBytes(
+    List<int> bytes, {
+    String? filename,
+    MediaType? contentType,
+    Map<String, List<String>>? headers,
+  }) {
+    return MultipartFileRecreatable(
+      Stream.fromIterable(<List<int>>[bytes]),
+      bytes.length,
+      filename: filename,
+      contentType: contentType,
+      headers: headers,
+    );
+  }
+
+  /// Creates a [MultipartFileRecreatable] object from a [File] in [filePath].
+  factory MultipartFileRecreatable.fromFileSync(
     String filePath, {
     String? filename,
     MediaType? contentType,
+    Map<String, List<String>>? headers,
   }) {
     filename ??= p.basename(filePath);
     final file = File(filePath);
@@ -27,15 +45,23 @@ class MultipartFileRecreatable extends MultipartFile {
     return MultipartFileRecreatable(
       stream,
       length,
-      filename,
-      filePath,
+      filename: filename,
       contentType: contentType,
+      headers: headers,
     );
   }
 
-  MultipartFileRecreatable recreate() => fromFileSync(
-        filePath,
-        filename: filename,
-        contentType: contentType,
-      );
+  /// The stream that will emit the file's contents.
+  final Stream<List<int>> data;
+
+  /// Recreates the [MultipartFileRecreatable] object.
+  MultipartFileRecreatable recreate() {
+    return MultipartFileRecreatable(
+      data,
+      length,
+      filename: filename,
+      contentType: contentType,
+      headers: headers,
+    );
+  }
 }

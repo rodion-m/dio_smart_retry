@@ -22,7 +22,7 @@ void main() {
         'https://rodion-m.ru/mock/post500.php',
         data: formData,
       );
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       exception = error.error;
     }
 
@@ -51,8 +51,8 @@ void main() {
         'https://rodion-m.ru/mock/post500.php',
         data: formData,
       );
-    } on DioError catch (error) {
-      if (error.type != DioErrorType.badResponse) {
+    } on DioException catch (error) {
+      if (error.type != DioExceptionType.badResponse) {
         rethrow;
       }
     }
