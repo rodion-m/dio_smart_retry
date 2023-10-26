@@ -1,4 +1,4 @@
-## 5.1.0
+## 6.0.0
 - Updated internal libraries.
 - Bumped minimum Dart SDK to 3.0.
 - Added `MultipartFileRecreatable` documentation.
@@ -6,8 +6,8 @@
 - Adds a new `MultipartFileRecreatable.fromBytes` factory compatible with web.
 - Added a new `headers` parameter.
 - You can now read the file's content with `MultipartFileRecreatable.data`.
-- **Breaking:** `filename` is now a named parameter.
-- **Breaking:** Removed `MultipartFileRecreatable.filePath`.
+- **Breaking:** `MultipartFileRecreatable.filename` is now a named parameter to match `dio`.
+- **Breaking:** Removed `MultipartFileRecreatable.filePath` since it was not being used internally.
 
 ## 5.0.0
 - Add supporting of the new dio 5.+
