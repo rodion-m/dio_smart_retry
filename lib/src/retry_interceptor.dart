@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:dio_smart_retry/src/default_retry_evaluator.dart';
 import 'package:dio_smart_retry/src/http_status_codes.dart';
-import 'package:dio_smart_retry/src/multipart_file_recreatable.dart';
-import 'package:dio_smart_retry/src/retry_not_supported_exception.dart';
 
 typedef RetryEvaluator = FutureOr<bool> Function(
   DioException error,
@@ -45,9 +43,6 @@ class RetryInterceptor extends Interceptor {
       );
     }
   }
-
-  static const _multipartRetryHelpLink =
-      'https://github.com/rodion-m/dio_smart_retry#retry-requests-with-multipartform-data';
 
   /// The original dio
   final Dio dio;
@@ -102,12 +97,6 @@ class RetryInterceptor extends Interceptor {
   }
 
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    _printErrorIfRequestHasMultipartFile(options);
-    super.onRequest(options, handler);
-  }
-
-  @override
   Future<dynamic> onError(
     DioException err,
     ErrorInterceptorHandler handler,
@@ -137,14 +126,7 @@ class RetryInterceptor extends Interceptor {
 
     var requestOptions = err.requestOptions;
     if (requestOptions.data is FormData) {
-      try {
-        requestOptions = _recreateOptions(err.requestOptions);
-      } on RetryNotSupportedException catch (e) {
-        return super.onError(
-          DioException(requestOptions: requestOptions, error: e),
-          handler,
-        );
-      }
+      requestOptions = _recreateOptions(err.requestOptions);
     }
 
     if (delay != Duration.zero) {
@@ -179,40 +161,8 @@ class RetryInterceptor extends Interceptor {
       );
     }
     final formData = options.data as FormData;
-    final newFormData = FormData();
-    newFormData.fields.addAll(formData.fields);
-    for (final pair in formData.files) {
-      final file = pair.value;
-      if (file is MultipartFileRecreatable) {
-        newFormData.files.add(MapEntry(pair.key, file.recreate()));
-      } else {
-        throw RetryNotSupportedException(
-          'Use MultipartFileRecreatable class '
-          'instead of MultipartFile to make retry available. '
-          'See: $_multipartRetryHelpLink',
-        );
-      }
-    }
+    final newFormData = formData.clone();
     return options.copyWith(data: newFormData);
-  }
-
-  var _multipartFileChecked = false;
-
-  void _printErrorIfRequestHasMultipartFile(RequestOptions options) {
-    if (_multipartFileChecked) return;
-    if (options.data is FormData) {
-      final data = options.data as FormData;
-      if (data.files.any((pair) => pair.value is! MultipartFileRecreatable)) {
-        final printer = logPrint ?? print;
-        printer(
-          'WARNING: Retry is not supported for MultipartFile class. '
-          'Use MultipartFileRecreatable class '
-          'instead of MultipartFile to make retry available. '
-          'See: $_multipartRetryHelpLink',
-        );
-      }
-    }
-    _multipartFileChecked = true;
   }
 }
 
