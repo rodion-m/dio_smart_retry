@@ -1,6 +1,6 @@
 name: dio_smart_retry
 description: Retry library for Dio and Dio package made with love. By default, the request will be retried only for appropriate retryable http statuses.
-version: 6.0.0
+version: 7.0.0
 repository: https://github.com/rodion-m/dio_smart_retry
 issue_tracker: https://github.com/rodion-m/dio_smart_retry/issues
 homepage: https://github.com/rodion-m/dio_smart_retry

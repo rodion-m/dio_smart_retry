@@ -1,3 +1,6 @@
+## 7.0.0
+- [BREAKING CHANGE] `MultipartFileRecreatable` removed. Use a regular `MultipartFile` instead of `MultipartFileRecreatable`.
+
 ## 6.0.0
 - Updated internal libraries.
 - Bumped minimum Dart SDK to 3.0.

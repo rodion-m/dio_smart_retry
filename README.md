@@ -118,18 +118,9 @@ dio.interceptors.add(
 await dio.get<dynamic>('https://mock.codes/400');
 ```
 
-## Retry requests with `multipart/form-data`
-Because dio's class for multipart data `MultipartFile` doesn't support stream rewinding (recreation) to support retry for multipart data you should use a class `MultipartFileRecreatable` instead of `MultipartFile`. \
-Here is an example:
-```dart
-final formData =
-    FormData.fromMap({'file': MultipartFileRecreatable.fromFileSync('README.md')});
-  await dio.post<dynamic>(
-    'https://multipart.free.beeceptor.com/post500',
-    data: formData,
-  );
-```
-See the full example in the test: https://github.com/rodion-m/dio_smart_retry/blob/63a3bddae8b5a0581c35c4ae5e973996561d9100/test/multipart_retry_tests.dart#L32-L61
+## Migrating to 7.0
+
+Use `MultipartFile` instead of `MultipartFileRecreatable`.
 
 ## Migrating to 6.0
 
