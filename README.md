@@ -120,29 +120,3 @@ await dio.get<dynamic>('https://mock.codes/400');
 ## Migrating to 7.0
 
 Use `MultipartFile` instead of `MultipartFileRecreatable`.
-
-## Migrating to 6.0
-
-Version 6.0 introduces 2 breaking changes:
-- `MultipartFileRecreatable.filename` is now a named parameter
-- `MultipartFileRecreatable.filePath` is now removed
-
-To update to the latest version, if you were using the `MultipartFileRecreatable` constructor, remove the `filePath` parameter and change `filename` to a named parameter:
-
-Old:
-```dart
-return MultipartFileRecreatable(
-  stream,
-  length,
-  filename,
-  filePath,
-);
-```
-New:
-```dart
-return MultipartFileRecreatable(
-  stream,
-  length,
-  filename: filename,
-);
-```
