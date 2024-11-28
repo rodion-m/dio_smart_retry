@@ -3,13 +3,7 @@ linter:
   rules:
     public_member_api_docs: false
 
-analyzer:
-  plugins:
-    - dart_code_metrics
-
 dart_code_metrics:
-  anti-patterns:
-    - long-method
   metrics:
     cyclomatic-complexity: 20
     maximum-nesting-level: 5
@@ -24,7 +18,6 @@ dart_code_metrics:
     - no-equal-arguments:
         severity: warning
     - avoid-unused-parameters
-    - binary-expression-operand-order
     - no-object-declaration
     - prefer-trailing-comma:
         exclude:

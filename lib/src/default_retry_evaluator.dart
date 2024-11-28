@@ -10,7 +10,6 @@ class DefaultRetryEvaluator {
 
   /// Returns true only if the response hasn't been cancelled
   ///   or got a bad status code.
-  // ignore: avoid-unused-parameters
   FutureOr<bool> evaluate(DioException error, int attempt) {
     bool shouldRetry;
     if (error.type == DioExceptionType.badResponse) {
